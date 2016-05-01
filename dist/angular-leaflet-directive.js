@@ -2104,7 +2104,7 @@ angular.module('leaflet-directive')
     if (isDefined(layerOptions) && isDefined(layerOptions.loadedDefer)) {
       if (angular.isFunction(layerOptions.loadedDefer)) {
         var defers = layerOptions.loadedDefer();
-        $log.debug('Loaded Deferred', defers);
+        //$log.debug('Loaded Deferred', defers);
         var count = defers.length;
         if (count > 0) {
           var resolve = function() {
@@ -2295,6 +2295,14 @@ angular.module('leaflet-directive').factory('leafletMapDefaults', ["$q", "leafle
         mapDefaults.markerZoomAnimation = d.markerZoomAnimation;
       }
 
+      if (isDefined(d.inertia)) {
+        mapDefaults.inertia = d.inertia;
+      }
+
+      if (isDefined(d.zoomAnimationThreshold)) {
+        mapDefaults.zoomAnimationThreshold = d.zoomAnimationThreshold;
+      }
+
       if (d.map) {
         for (var option in d.map) {
           mapDefaults[option] = d.map[option];
@@ -2356,6 +2364,14 @@ angular.module('leaflet-directive').factory('leafletMapDefaults', ["$q", "leafle
 
         if (isDefined(userDefaults.markerZoomAnimation)) {
           newDefaults.markerZoomAnimation = userDefaults.markerZoomAnimation;
+        }
+
+        if (isDefined(userDefaults.inertia)) {
+          newDefaults.inertia = userDefaults.inertia;
+        }
+
+        if (isDefined(userDefaults.zoomAnimationThreshold)) {
+          newDefaults.zoomAnimationThreshold = userDefaults.zoomAnimationThreshold;
         }
 
         if (isDefined(userDefaults.worldCopyJump)) {
@@ -3934,7 +3950,7 @@ angular.module('leaflet-directive').directive('layercontrol', ["$filter", "$log"
     transclude: false,
     require: '^leaflet',
     controller: ["$scope", "$element", "$sce", function($scope, $element, $sce) {
-      $log.debug('[Angular Directive - Layers] layers', $scope, $element);
+      //$log.debug('[Angular Directive - Layers] layers', $scope, $element);
       var safeApply = leafletHelpers.safeApply;
       var isDefined = leafletHelpers.isDefined;
       angular.extend($scope, {
@@ -4715,7 +4731,7 @@ angular.module('leaflet-directive').directive('markers',
         var doCheckOldModel =  isDefined(oldMarkerModels);
         for (var name in lMarkers) {
           if (!hasLogged) {
-            $log.debug(errorHeader + '[markers] destroy: ');
+            //$log.debug(errorHeader + '[markers] destroy: ');
             hasLogged = true;
           }
 
@@ -4741,7 +4757,7 @@ angular.module('leaflet-directive').directive('markers',
       var _destroy = function(markerModels, oldMarkerModels, lMarkers, map, layers) {
         _seeWhatWeAlreadyHave(markerModels, oldMarkerModels, lMarkers, false,
             function(newMarker, oldMarker, lMarkerName) {
-              $log.debug(errorHeader + '[marker] is deleting marker: ' + lMarkerName);
+              //$log.debug(errorHeader + '[marker] is deleting marker: ' + lMarkerName);
               deleteMarker(lMarkers[lMarkerName], map, layers);
               delete lMarkers[lMarkerName];
             });
@@ -4751,7 +4767,7 @@ angular.module('leaflet-directive').directive('markers',
         var skips = {};
         _seeWhatWeAlreadyHave(newModels, oldModels, lMarkers, true,
             function(newMarker, oldMarker, lMarkerName) {
-              $log.debug(errorHeader + '[marker] is already rendered, marker: ' + lMarkerName);
+              //$log.debug(errorHeader + '[marker] is already rendered, marker: ' + lMarkerName);
               skips[lMarkerName] = newMarker;
             });
 
@@ -5160,7 +5176,7 @@ angular.module('leaflet-directive')
 
   var EventsHelper = function(rootBroadcastName, lObjectType) {
     this.rootBroadcastName = rootBroadcastName;
-    $log.debug('LeafletEventsHelpersFactory: lObjectType: ' + lObjectType + 'rootBroadcastName: ' + rootBroadcastName);
+    //$log.debug('LeafletEventsHelpersFactory: lObjectType: ' + lObjectType + 'rootBroadcastName: ' + rootBroadcastName);
 
     //used to path/key out certain properties based on the type , "markers", "geojson"
     this.lObjectType = lObjectType;
@@ -5195,7 +5211,7 @@ angular.module('leaflet-directive')
 
     return function(e) {
       var broadcastName = _this.rootBroadcastName + maybeMapId + '.' + eventName;
-      $log.debug(broadcastName);
+      //$log.debug(broadcastName);
       _this.fire(leafletScope, broadcastName, logic, e, e.target || lObject, model, name, layerName, extra);
     };
   };
@@ -5467,7 +5483,7 @@ angular.module('leaflet-directive')
     return function(e) {
       // Put together broadcast name
       var broadcastName = 'leafletDirectiveMap.' + maybeMapId + eventName;
-      $log.debug(broadcastName);
+     // $log.debug(broadcastName);
 
       // Safely broadcast the event
       fire(scope, broadcastName, logic, e, e.target, scope);
@@ -5600,7 +5616,7 @@ angular.module('leaflet-directive')
 
     return function(e) {
       var broadcastName = 'leafletDirectivePath' + maybeMapId + '.' + eventName;
-      $log.debug(broadcastName);
+      //$log.debug(broadcastName);
       fire(leafletScope, broadcastName, logic, e, e.target || lObject, model, name, layerName);
     };
   };
